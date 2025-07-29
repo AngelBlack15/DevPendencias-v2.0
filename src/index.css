@@ -1,0 +1,875 @@
+:root {
+  --primary-bg: #232122;
+  --white: #ffffff;
+  --black: #000000;
+  --overlay-bg: rgba(35, 33, 34, 0.75);
+  --button-bg: #ffffff;
+  --button-text: #232122;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* Base styles */
+.container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: var(--white);
+  z-index: 100;
+  position: relative;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+  max-width: 100%;
+}
+
+/* Estilos para el botón animado */
+.animated-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 28px;
+  border: 4px solid transparent;
+  font-size: 16px;
+  background-color: transparent;
+  border-radius: 100px;
+  font-weight: 600;
+  color: var(--button-color, #232122);
+  box-shadow: 0 0 0 2px var(--button-color, #232122);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  white-space: nowrap;
+  min-width: 140px;
+}
+
+.animated-button svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  fill: var(--button-color, #232122);
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button .arr-1 {
+  right: 16px;
+}
+
+.animated-button .arr-2 {
+  left: -25%;
+}
+
+.animated-button .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: var(--button-color, #232122);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button .text {
+  position: relative;
+  z-index: 1;
+  transform: translateX(-12px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button:hover {
+  color: var(--button-hover-text, #212121);
+  border-radius: 12px;
+  background-color: transparent;
+}
+
+.animated-button:hover .arr-1 {
+  right: -25%;
+}
+
+.animated-button:hover .arr-2 {
+  left: 16px;
+}
+
+.animated-button:hover .text {
+  transform: translateX(12px);
+}
+
+.animated-button:hover svg {
+  fill: var(--button-hover-text, #212121);
+}
+
+.animated-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 0 4px var(--button-color, greenyellow) !important;
+}
+
+.animated-button:hover .circle {
+  width: 220px;
+  height: 220px;
+  opacity: 1;
+}
+
+/* Estilos específicos para el botón de contacto en el header */
+.header .animated-button {
+  padding: 10px 24px;
+  font-size: 0.9rem;
+  border-radius: 50px; /* Borde muy redondeado para el botón del header */
+}
+
+/* Ajustes de responsive para el border-radius */
+@media (max-width: 1024px) {
+  .btn-53 {
+    border-radius: 60px;
+  }
+  .header .animated-button {
+    border-radius: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-53 {
+    border-radius: 50px;
+    padding: 0.8rem 2.2rem;
+  }
+  .header .animated-button {
+    border-radius: 35px;
+    padding: 8px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-53 {
+    border-radius: 40px;
+    padding: 0.6rem 1.8rem;
+  }
+  .header .animated-button {
+    border-radius: 30px;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Estilos para el botón con animación de letras */
+.btn-53,
+.btn-53 *,
+.btn-53 :after,
+.btn-53 :before,
+.btn-53:after,
+.btn-53:before {
+  border: 0 solid;
+  box-sizing: border-box;
+}
+
+/* Estilos base para el botón con animación de letras */
+.btn-53,
+button.btn-53 {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  background-color: #fff;
+  background-image: none;
+  color: #000;
+  cursor: pointer;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  font-size: 100%;
+  line-height: 1.5;
+  margin: 0;
+  -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
+  mask-image: radial-gradient(#000, #fff);
+  padding: 1rem 2.5rem;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+  border-radius: 100px !important;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Estilos específicos para el botón Visitar Recursos */
+.visit-button,
+.visit-button.btn-53 {
+  background-color: #000000; /* Fondo negro */
+  color: #ffffff; /* Letras blancas */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  background-image: none;
+  cursor: pointer;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  font-size: 100%;
+  line-height: 1.5;
+  margin: 0;
+  -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
+  mask-image: radial-gradient(#000, #fff);
+  padding: 1rem 2.5rem;
+  border: 1px solid #000000; /* Borde negro */
+  outline: none;
+  transition: all 0.3s ease;
+  border-radius: 100px !important;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Asegurando que el hover no afecte el border-radius */
+.btn-53:hover,
+button.btn-53:hover {
+  border-radius: 100px !important;
+}
+
+/* Efecto hover específico para el botón Visitar Recursos */
+.visit-button,
+.visit-button.btn-53 {
+  position: relative;
+  top: 0;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.visit-button:hover,
+.visit-button.btn-53:hover {
+  border-radius: 100px !important;
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  top: -2px; /* Usamos top en lugar de transform para evitar cambios de tamaño */
+}
+
+.btn-53:disabled {
+  cursor: default;
+}
+
+.btn-53:-moz-focusring {
+  outline: auto;
+}
+
+.btn-53 svg {
+  display: block;
+}
+
+.btn-53 [hidden] {
+  display: none;
+}
+
+.btn-53 {
+  border: 1px solid;
+  border-radius: 999px;
+  box-sizing: border-box;
+  display: block;
+  font-weight: 900;
+  overflow: hidden;
+  padding: 1.2rem 3rem;
+  position: relative;
+  text-transform: uppercase;
+}
+
+.btn-53 .original {
+  background: #fff;
+  color: #000;
+  display: grid;
+  inset: 0;
+  place-content: center;
+  position: absolute;
+  transition: transform 0.2s cubic-bezier(0.87, 0, 0.13, 1);
+  z-index: 2;
+}
+
+.btn-53:hover .original {
+  transform: translateY(100%);
+}
+
+.btn-53 .letters {
+  display: inline-flex;
+  color: #fff;
+}
+
+.btn-53 span {
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: transform 0.1s cubic-bezier(0.87, 0, 0.13, 1), opacity 0.1s;
+  display: inline-block;
+  /* Inicialmente oculto */
+  transition-delay: 0s;
+}
+
+/* Estado inicial para todas las letras */
+.btn-53:not(:hover) span {
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: none;
+}
+
+.btn-53:not(:hover) span:nth-child(2n) {
+  transform: translateY(15px);
+}
+
+/* Animación al hacer hover */
+.btn-53:hover span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-53 span:nth-child(2n) {
+  transform: translateY(15px);
+}
+
+/* Asegurar que cada letra tenga su propio retraso */
+.btn-53:hover span:nth-child(1) { transition-delay: 0s; }
+.btn-53:hover span:nth-child(2) { transition-delay: 0.025s; }
+.btn-53:hover span:nth-child(3) { transition-delay: 0.05s; }
+.btn-53:hover span:nth-child(4) { transition-delay: 0.075s; }
+.btn-53:hover span:nth-child(5) { transition-delay: 0.1s; }
+.btn-53:hover span:nth-child(6) { transition-delay: 0.125s; }
+.btn-53:hover span:nth-child(7) { transition-delay: 0.15s; }
+.btn-53:hover span:nth-child(8) { transition-delay: 0.175s; }
+.btn-53:hover span:nth-child(9) { transition-delay: 0.2s; }
+.btn-53:hover span:nth-child(10) { transition-delay: 0.225s; }
+.btn-53:hover span:nth-child(11) { transition-delay: 0.25s; }
+.btn-53:hover span:nth-child(12) { transition-delay: 0.275s; }
+.btn-53:hover span:nth-child(13) { transition-delay: 0.3s; }
+.btn-53:hover span:nth-child(14) { transition-delay: 0.325s; }
+.btn-53:hover span:nth-child(15) { transition-delay: 0.35s; }
+
+.btn-53:hover {
+  background-color: #232122;
+  color: #fff;
+}
+
+.btn-53:hover span {
+  opacity: 1;
+  transform: translateY(0);
+  color: #fff;
+}
+
+/* Ajustar el retraso de la animación para cada letra */
+.btn-53:hover span:nth-child(1) { transition-delay: 0s; }
+.btn-53:hover span:nth-child(2) { transition-delay: 0.1s; }
+.btn-53:hover span:nth-child(3) { transition-delay: 0.2s; }
+.btn-53:hover span:nth-child(4) { transition-delay: 0.3s; }
+.btn-53:hover span:nth-child(5) { transition-delay: 0.4s; }
+.btn-53:hover span:nth-child(6) { transition-delay: 0.5s; }
+.btn-53:hover span:nth-child(7) { transition-delay: 0.6s; }
+.btn-53:hover span:nth-child(8) { transition-delay: 0.7s; }
+.btn-53:hover span:nth-child(9) { transition-delay: 0.8s; }
+.btn-53:hover span:nth-child(10) { transition-delay: 0.9s; }
+
+/* Hero section */
+.hero {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+  overflow: hidden;
+}
+
+.background-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: opacity 0.3s ease;
+}
+
+.hero-content {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  align-items: center;
+}
+
+.hero-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visit-button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  padding: 2rem 4rem; /* Aumentado el padding */
+  font-size: 2.5rem; /* Aumentado el tamaño de fuente */
+  font-weight: 600;
+  border-radius: 8px; /* Aumentado el radio del borde */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+  min-width: 300px; /* Ancho mínimo para mantener proporciones */
+  transform: scale(1.5); /* Aumenta el tamaño al 150% */
+  transform-origin: center; /* Escala desde el centro */
+}
+
+.visit-button {
+  transform: scale(1.5); /* Mover la escala al estado normal */
+  transform-origin: center;
+}
+
+.visit-button:hover {
+  transform: scale(1.5) translateY(-3px); /* Mantener la escala y añadir el desplazamiento */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hero-right {
+  flex: 1;
+  background-color: var(--overlay-bg);
+  padding: 2.5rem;
+  border-radius: 8px;
+  margin-left: 2rem;
+  max-width: 600px;
+  height: auto; /* Se ajusta al contenido */
+  overflow-y: auto; /* Añade scroll vertical si el contenido es más grande */
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.hero-title .dev-text {
+  color: #00ffff; /* Color aqua */
+  font-weight: 900;
+  display: inline-block;
+  transform: scaleY(2); /* Solo escala vertical */
+  transform-origin: left top;
+  margin-bottom: 0.2em; /* Espacio después del texto escalado */
+  white-space: nowrap; /* Evita que el texto se rompa en múltiples líneas */
+  font-size: 2em;
+}
+
+.hero-title .pendencias-text {
+  color: #ffffff;
+  font-weight: 400;
+  display: block;
+  margin-top: 0em; /* Espacio después del texto escalado */
+  line-height: 1; /* Ajuste fino del interlineado */
+  font-size: 2em;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #F200FF; /* Color morado solicitado */
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(242, 0, 255, 0.3);
+}
+
+.hero-text {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  margin-bottom: 0rem;
+  color: #f0f0f0;
+  text-align: left;
+}
+
+.hero-text .feature {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0;
+  color: #ffffff;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* Asegurar que los saltos de línea tengan el espaciado correcto */
+.hero-text br {
+  content: "";
+  margin: 1rem 0;
+  display: block;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1600px) {
+  .hero-content {
+    max-width: 1200px;
+  }
+  
+  .hero-title {
+    font-size: 2.25rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 1280px) {
+  .hero-content {
+    max-width: 1000px;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .hero-text {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .hero-text {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Estilos para tablets */
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: var(--white);
+    position: relative;
+    z-index: 10;
+  }
+
+  .hero {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 2rem 4rem;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .hero-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+    order: 1;
+  }
+  
+  .visit-button {
+    display: block !important;
+    width: 100%;
+    max-width: 400px;
+    padding: 1.5rem 0rem !important;
+    padding-left: 1.3rem !important;
+    padding-right: 14rem !important;
+    font-size: 1.8rem !important;
+    margin: 0rem auto !important;
+    position: relative !important;
+    z-index: 10 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+    border-radius: 8px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .visit-button:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .hero-right {
+    width: 100%;
+    padding: 2.5rem;
+    order: 2;
+    margin: 0;
+    height: auto;
+    max-height: none;
+    position: relative;
+    overflow-y: visible;
+    border-radius: 8px;
+  }
+
+  .visit-button {
+    width: 100%;
+    max-width: 400px;
+    padding: 1.5rem 4rem;
+    font-size: 2rem;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    padding: 0;
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .hero-left {
+    width: 100%;
+    padding: 4rem 1rem 2rem; /* Aumentado el padding superior */
+    order: 1; /* Botón primero */
+    display: flex;
+    justify-content: center;
+    margin-bottom: -10rem;
+    margin-top: -10rem;
+  }
+
+  .hero-right {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 1.5rem;
+    height: auto;
+    max-height: 70vh; /* Altura máxima del 70% del viewport */
+    overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+    border-radius: 8px;
+    order: 2; /* Recuadro gris después del botón */
+    flex: 1;
+    -webkit-overflow-scrolling: touch; /* Mejora el scroll en dispositivos táctiles */
+    scrollbar-width: thin; /* Para navegadores que lo soportan */
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .hero-text {
+    font-size: 1rem;
+  }
+
+  /* Asegurar que el botón no sea demasiado ancho */
+  .visit-button {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    font-size: 1.5rem;
+    transform: none; /* Quitar transform para móviles */
+  }
+
+  .visit-button:hover {
+    transform: translateY(-3px);
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .logo {
+    height: 35px;
+  }
+  
+  .contact-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .hero {
+    padding: 0 1rem;
+  }
+  
+  .hero-title {
+    font-size: 1.75rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .hero-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0.8rem 1rem;
+  }
+  
+  .logo {
+    height: 30px;
+  }
+  
+  .contact-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .hero {
+    padding: 0 0.5rem;
+  }
+  
+  .hero-right {
+    padding: 1.5rem;
+    max-height: 65vh; /* Un poco menos para móviles */
+    overflow-y: auto;
+  }
+  
+  .hero-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .hero-text {
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .visit-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Estilos de scroll personalizados */
+.hero-right::-webkit-scrollbar {
+  width: 6px;
+}
+
+.hero-right::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.hero-right::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.hero-right::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Bottom spacing */
+.hero::after {
+  content: '';
+  display: block;
+  height: 2rem;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-bg);
+  z-index: 2;
+}
+
+/* Mejoras para dispositivos táctiles */
+@media (hover: none) {
+  .hero-right {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Los estilos de la página de recursos se han movido a src/components/ResourcesPage/ResourcesPage.css */

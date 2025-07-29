@@ -1,0 +1,553 @@
+@import '../../styles/animations.css';
+
+:root {
+  --tag-bg: #e2e8f0;
+  --tag-bg-dark: #cbd5e1;
+  --tag-text: #1e293b;
+  --category-bg: rgba(255, 255, 255, 0.8);
+  --category-bg-dark: rgba(255, 255, 255, 0.9);
+  --category-text: #334155;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --parallax-intensity: 0.5;
+  --parallax-rotation: 1deg;
+}
+
+.selectable-tags-wrapper {
+  width: 100%;
+  margin: 0rem 0;
+  position: relative;
+  padding: 0.5rem 0;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+  z-index: 10; /* Aseguramos que el contenedor principal esté por encima */
+}
+
+/* Efecto de movimiento suave al mover el ratón */
+@media (hover: hover) {
+  .selectable-tags-wrapper.parallax-enabled {
+    transition: transform 0.1s ease-out;
+  }
+  
+  .selectable-tags-wrapper.parallax-enabled .category-group {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  .selectable-tags-wrapper.parallax-enabled .tag {
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+/* Fondo con efecto de vidrio esmerilado */
+.tags-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0) 0%);
+  border-radius: 1.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0.5;
+  pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-10px) translateX(5px); }
+  50% { transform: translateY(0) translateX(10px); }
+  75% { transform: translateY(10px) translateX(5px); }
+}
+
+/* Contenedor principal de categorías */
+.categories-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 100; /* Aseguramos que esté por encima del contenido normal */
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  isolation: isolate; /* Crea un nuevo contexto de apilamiento */
+}
+
+/* Grupo de categoría */
+.category-group {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+              box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  perspective: 1000px;
+  z-index: 5; /* Aumentamos el z-index base */
+  will-change: transform, box-shadow;
+  transform: translate3d(0, 0, 0);
+}
+
+.category-group:hover {
+  transform: translateZ(15px) rotateX(calc(var(--parallax-rotation) * -1)) rotateY(calc(var(--parallax-rotation) * -1));
+  z-index: 15; /* Aumentamos el z-index al hacer hover */
+}
+
+/* Aseguramos que el contenedor de etiquetas se muestre por encima de todo */
+.selectable-tags-wrapper {
+  position: relative;
+  z-index: 100;
+  isolation: isolate;
+}
+
+/* Efecto de elevación más pronunciado en hover */
+.category-group:hover .category-header {
+  transform: translateY(-4px) translateZ(15px);
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.2);
+}
+
+/* Animación sutil de flotación para las categorías */
+@keyframes float-category {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50% { transform: translateY(-5px) translateZ(5px); }
+}
+
+.category-group {
+  animation: float-category 8s ease-in-out infinite;
+}
+
+/* Retraso escalonado para la animación de flotación */
+.category-group:nth-child(2) { animation-delay: 0.2s; }
+.category-group:nth-child(3) { animation-delay: 0.4s; }
+.category-group:nth-child(4) { animation-delay: 0.6s; }
+.category-group:nth-child(5) { animation-delay: 0.8s; }
+
+/* Estilo del botón de categoría */
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.2rem;
+  background: #232122;
+  background: linear-gradient(90deg, rgba(35, 33, 34, 1) 56%, rgba(0, 255, 255, 1) 100%); /* Nuevo gradiente personalizado */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #ffffff; /* Texto blanco */
+  transition: var(--transition);
+  position: relative;
+  z-index: 1;
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Efecto de profundidad 3D */
+.category-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.8rem;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.4), rgba(0, 255, 255, 0.1)); /* Resplandor aqua más intenso */
+  transform: translateZ(-1px);
+  z-index: -1;
+  transition: var(--transition);
+}
+
+/* Efecto de gradiente y hover */
+.category-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(0, 255, 255, 0.02)); /* Toques sutiles de aqua en el overlay */
+  opacity: 0.3;
+  transition: var(--transition);
+  z-index: -1;
+  border-radius: 0.8rem;
+}
+
+.category-header:hover {
+  transform: translateY(-3px) translateZ(10px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  background: #2d2a2b;
+  background: linear-gradient(90deg, rgba(45, 42, 43, 1) 56%, rgba(0, 230, 230, 1) 100%); /* Versión más clara para hover */
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.category-header:hover::before {
+  opacity: 1;
+}
+
+.category-header:hover::after {
+  transform: translateZ(-5px);
+  opacity: 0.8;
+}
+
+.category-header.expanded {
+  background: #2d2a2b;
+  background: linear-gradient(90deg, rgba(45, 42, 43, 1) 56%, rgba(0, 230, 230, 1) 100%); /* Mismo que en hover */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  color: #ffffff; /* Texto blanco */
+  transform: translateY(-1px) translateZ(5px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.category-header.expanded::before {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
+}
+
+/* Efecto de pulso al hacer clic */
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: var(--shadow); }
+  50% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.2); }
+  100% { transform: scale(1); box-shadow: var(--shadow-md); }
+}
+
+.category-header:active {
+  animation: pulse 0.3s ease-out;
+}
+
+/* Icono de flecha */
+.category-arrow {
+  transition: transform 0.3s ease;
+  font-size: 0.8em;
+  margin-left: 0.3rem;
+  opacity: 0.8;
+}
+
+.category-header.expanded .category-arrow {
+  transform: rotate(90deg);
+  color: #ffffff; /* Flecha blanca cuando está expandido */
+  opacity: 0.9;
+}
+
+/* Contenedor de etiquetas - Completamente transparente */
+.category-tags {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: transparent !important; /* Fondo completamente transparente */
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  z-index: 1000;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  max-height: 60vh;
+  overflow-y: auto;
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Eliminamos cualquier posible fondo heredado */
+.category-tags * {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.category-tags.expanded {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(5px);
+  animation: none;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Animación de flotación suave */
+@keyframes float {
+  0%, 100% { transform: translateY(10px) translateX(0) scale(1); }
+  25% { transform: translateY(8px) translateX(2px) scale(1.002); }
+  50% { transform: translateY(12px) translateX(0) scale(1); }
+  75% { transform: translateY(8px) translateX(-2px) scale(0.998); }
+}
+
+/* Efecto de entrada más suave */
+@keyframes fadeInUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(10px) scale(1);
+  }
+}
+
+/* Efecto de punta de flecha en el menú desplegable */
+.category-tags::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  background: url("data:image/svg+xml,%3Csvg width='20' height='10' viewBox='0 0 20 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0C4 0 0 10 0 10h20s-4-10-10-10z' fill='white'/%3E%3C/svg%3E") no-repeat;
+  background-size: contain;
+  filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.08));
+  z-index: 1;
+  opacity: 0.9;
+  transition: var(--transition);
+}
+
+.category-tags:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selectable-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  --sb-track-color: #232E33;
+  --sb-thumb-color: #00fff3;
+  --sb-size: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+.selectable-tags-container::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+.selectable-tags-container::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 15px;
+  margin: 5px 0;
+}
+
+.selectable-tags-container::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 15px;
+  border: 1px solid #232E33;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .selectable-tags-container {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}
+
+/* Scrollbar styles for category tags */
+.category-tags {
+  --sb-track-color: #232E33;
+  --sb-thumb-color: #00fff3;
+  --sb-size: 15px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+.category-tags::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+.category-tags::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 15px;
+  margin: 5px 0;
+}
+
+.category-tags::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 15px;
+  border: 1px solid #232E33;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .category-tags {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .categories-container {
+    gap: 0.4rem;
+  }
+  
+  .category-header {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+  
+  .category-tags {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    max-height: 60vh;
+    max-width: calc(100% - 2rem);
+  }
+  
+  .tag {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Mejoras de accesibilidad */
+.category-header:focus {
+  outline: 2px solid #4d90fe;
+}
+
+/* Estilo base de las etiquetas */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #232122 !important; /* Fondo oscuro */
+  color: #ffffff !important; /* Texto blanco */
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin: 0.1rem;
+  position: relative;
+  z-index: 1001;
+}
+
+/* Efecto de profundidad 3D para etiquetas */
+.tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
+  opacity: 0.8;
+  z-index: -1;
+  border-radius: 1.5rem;
+  transition: var(--transition);
+  transform: translateZ(-1px);
+}
+
+/* Efecto hover de las etiquetas */
+.tag:hover,
+.tag.selected {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 255, 255, 0.4);
+  background-color: #00ffff; /* Aqua al hacer hover/seleccionado */
+  color: #232122; /* Texto oscuro al hacer hover/seleccionado */
+  border-color: rgba(0, 255, 255, 0.7);
+}
+
+.tag:hover::before {
+  opacity: 1;
+  transform: translateZ(-3px);
+}
+
+/* Efecto de pulsación al hacer clic */
+.tag:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+  background-color: #00e6e6; /* Un tono de aqua ligeramente más oscuro al hacer clic */
+}
+
+.tag.selected::before {
+  content: '✓';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #10b981;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  color: white;
+  border: 2px solid white;
+  z-index: 3;
+  animation: none;
+}
+
+/* Efecto de partículas al seleccionar */
+@keyframes particle {
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(var(--tx, 0), var(--ty, 0)) scale(1); opacity: 0; }
+}
+
+.tag.selected::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  animation: particle 0.6s ease-out forwards;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+/* Colores de etiquetas */
+.tag.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff;}
+.tag.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff;}
+.tag.green { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff;}
+.tag.yellow { background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; }
+.tag.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #ffffff;}
+.tag.pink { background: linear-gradient(135deg, #ec4899, #db2777); color: #ffffff;}
+.tag.indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #ffffff;}
+.tag.cyan { background: linear-gradient(135deg, #06b6d4, #0891b2); color: #ffffff;}
+.tag.teal { background: linear-gradient(135deg, #14b8a6, #0d9488); color: #ffffff;}
+.tag.emerald { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff;}
+.tag.rose { background: linear-gradient(135deg, #f43f5e, #e11d48); color: #ffffff;}
+.tag.orange { background: linear-gradient(135deg, #f97316, #ea580c); color: #ffffff;}
+.tag.amber { background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff;}
+.tag.lime { background: linear-gradient(135deg, #84cc16, #65a30d); color: #ffffff;}
+.tag.sky { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: #ffffff;}
+.tag.gray { background: linear-gradient(135deg, #6b7280, #4b5563); color: #ffffff;}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Devpendencias – Administradores</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body { font-family: Arial; padding:20px; background:#f5f5f5; }
+    form { background:#fff; padding:15px; margin-bottom:20px;
+           border:1px solid #ccc; border-radius:5px; max-width:400px; }
+    input, button { width:100%; margin-top:10px; padding:10px;
+                   border:1px solid #ccc; border-radius:4px; box-sizing:border-box; }
+    h2 { margin-top:40px; }
+  </style>
+</head>
+<body>
+  <h2>Registrar administrador</h2>
+  <form id="adminForm">
+    <label for="name">Nombre completo</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      placeholder="Tu nombre"
+      pattern="^[A-Za-zÀ-ÖØ-öø-ÿ ]{1,50}$"
+      title="Solo letras, espacios y acentos (máx. 50 caracteres)"
+      maxlength="50"
+      required
+    />
+
+    <label for="email">Correo electrónico</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      placeholder="admin@ejemplo.com"
+      required
+    />
+
+    <label for="password">Contraseña</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      placeholder="Mínimo 6 caracteres"
+      minlength="6"
+      required
+    />
+
+    <button type="submit">Registrar</button>
+  </form>
+
+  <h2>Iniciar sesión de administrador</h2>
+  <form id="loginForm">
+    <label for="loginUsername">Nombre de usuario</label>
+    <input
+      type="text"
+      id="loginUsername"
+      name="username"
+      placeholder="Tu nombre de administrador"
+      required
+    />
+
+    <label for="loginEmail">Correo electrónico</label>
+    <input
+      type="email"
+      id="loginEmail"
+      name="email"
+      placeholder="admin@ejemplo.com"
+      required
+    />
+
+    <label for="loginPassword">Contraseña</label>
+    <input
+      type="password"
+      id="loginPassword"
+      name="password"
+      placeholder="Tu contraseña"
+      required
+    />
+
+    <button type="submit">Iniciar sesión</button>
+  </form>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+
+    // Registro de administrador
+    document.getElementById('adminForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        name:     e.target.name.value.trim(),
+        email:    e.target.email.value.trim(),
+        password: e.target.password.value
+      };
+
+      try {
+        const res  = await fetch(`${API_BASE}/administrators`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(data)
+        });
+        const body = await res.json();
+
+        if (res.status === 409) throw new Error(body.error);
+        if (!res.ok) {
+          const msg = body.errors
+            ? body.errors.map(x=>x.msg).join(', ')
+            : body.error || 'Error interno';
+          throw new Error(msg);
+        }
+
+        Swal.fire('¡Registrado!','Administrador creado','success');
+        e.target.reset();
+      } catch (err) {
+        Swal.fire('Error', err.message, 'error');
+      }
+    });
+
+    // Login de administrador
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const username = e.target.username.value.trim();
+      const email    = e.target.email.value.trim();
+      const password = e.target.password.value;
+
+      try {
+        const res  = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ username, email, password })
+        });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error || 'Error al iniciar sesión');
+
+        localStorage.setItem('username', body.name);
+        window.location.href = '/welcome.html';
+      } catch (err) {
+        Swal.fire('Error', err.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>
